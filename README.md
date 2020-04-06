@@ -2,13 +2,12 @@
 
 ## 環境構築
 
-このプロジェクトを動かすためにわざわざ自分のmysql環境汚すのはあれなのでdockerで仮想環境を作る。
 
 ```bash
 # 今のディレクトリを確認
 # プロジェクト直下であることを確認
-$ pwd
-xx/xx/xx/to-do-sample
+$ basename `pwd`
+todo-app
 
 # docker上でこのプロジェクト用のmysqlを立てる
 $ docker-compose up -d
@@ -24,7 +23,7 @@ Password: docker
 ```
 ```sql
 /**** ログイン成功 ****/
-## to_do_sample っていうDBがあることを確認
+## to_do というDBがあることを確認
 mysql> SHOW DATABASES;
 +--------------------+
 | Database           |
@@ -47,12 +46,12 @@ mysql> SHOW TABLES;
 
 ## `to_do_category` テーブル作成
 mysql> CREATE TABLE `to_do_category` (
-         `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-         `name` VARCHAR(255) NOT NULL,
-         `slug` VARCHAR(255) NOT NULL,
-         `category_color` TINYINT NOT NULL,
-         `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-         `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+         `id`         BIGINT(20)   unsigned     NOT NULL AUTO_INCREMENT,
+         `name`       VARCHAR(255)              NOT NULL,
+         `slug`       VARCHAR(64) CHARSET ascii NOT NULL,
+         `color`      TINYINT UNSIGNED          NOT NULL,
+         `updated_at` timestamp                 NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+         `created_at` timestamp                 NOT NULL DEFAULT CURRENT_TIMESTAMP,
          PRIMARY KEY (`id`)
        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -83,12 +82,13 @@ mysql> SELECT * FROM `to_do_category`;
 
 ## 'to_do'テーブルを作成
 mysql> CREATE TABLE `to_do` (
-         `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-         `category_id` bigint(20) unsigned NOT NULL,
-         `title` VARCHAR(255) NOT NULL,
-         `body` VARCHAR(255) NOT NULL,
-         `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-         `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+         `id`          BIGINT(20) unsigned NOT NULL AUTO_INCREMENT,
+         `category_id` BIGINT(20) unsigned NOT NULL,
+         `title`       VARCHAR(255)        NOT NULL,
+         `body`        TEXT,
+         `state`       TINYINT UNSIGNED    NOT NULL,
+         `updated_at`  TIMESTAMP           NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+         `created_at`  TIMESTAMP           NOT NULL DEFAULT CURRENT_TIMESTAMP,
          PRIMARY KEY (`id`)
        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
