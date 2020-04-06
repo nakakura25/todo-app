@@ -11,9 +11,9 @@ services:
     container_name: to_do_sample_container
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE:      to_do_sample
-      MYSQL_USER:          docker
-      MYSQL_PASSWORD:      docker
+      MYSQL_DATABASE:      to_do
+      MYSQL_USER:          nextbeat
+      MYSQL_PASSWORD:      livet
       TZ: 'Asia/Tokyo'
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     volumes:

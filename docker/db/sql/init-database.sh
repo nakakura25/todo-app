@@ -3,4 +3,4 @@
 #sleep 90s
 
 #run the setup script to create the DB and the schema in the DB
-mysql -u docker -pdocker to_do_sample < "/docker-entrypoint-initdb.d/init.sql"
+mysql -u nextbeat -plivet to_do < "/docker-entrypoint-initdb.d/init.sql"
