@@ -1,7 +1,6 @@
 /**
-  *
-  * to do sample project
-  *
+  * This is a sample of Todo Application.
+  * 
   */
 
 package lib.model
@@ -11,12 +10,14 @@ import ixias.util.EnumStatus
 
 import java.time.LocalDateTime
 
+// ユーザーを表すモデル
+//~~~~~~~~~~~~~~~~~~~~
 import User._
 case class User(
-  id: Option[Id],
-  name: String,
-  age: Short,
-  state: Status,
+  id:        Option[Id],
+  name:      String,
+  age:       Short,
+  state:     Status,
   updatedAt: LocalDateTime = NOW,
   createdAt: LocalDateTime = NOW
 ) extends EntityModel[Id]

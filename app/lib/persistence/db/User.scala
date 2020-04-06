@@ -1,7 +1,6 @@
 /**
-  *
-  * to do sample project
-  *
+  * This is a sample of Todo Application.
+  * 
   */
 
 package lib.persistence.db
@@ -12,7 +11,7 @@ import ixias.persistence.model.Table
 
 import lib.model.User
 
-// UserTable
+// UserTable: Userテーブルへのマッピングを行う
 //~~~~~~~~~~~~~~
 case class UserTable[P <: JdbcProfile]()(implicit val driver: P)
   extends Table[User, P] {
