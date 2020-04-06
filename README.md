@@ -67,13 +67,11 @@ mysql> SHOW TABLES;
 1 row in set
 
 ## 'to_do_category'テーブルのサンプルデータ挿入
-
 mysql> INSERT INTO to_do_category(name,slug,category_color) values('フロントエンド','front',1);
 mysql> INSERT INTO to_do_category(name,slug,category_color) values('バックエンド','back',2);
 mysql> INSERT INTO to_do_category(name,slug,category_color) values('インフラ','infra',3);
 
-/*** データが入っているか確認 ****/
-
+## データが入っているか確認
 mysql> SELECT * FROM `to_do_category`;
 +----+----------------+-------+----------------+---------------------+---------------------+
 | id | name           | slug  | category_color | updated_at          | created_at          |
@@ -83,8 +81,7 @@ mysql> SELECT * FROM `to_do_category`;
 | 3  | インフラ       | infra | 3              | 2020-01-31 17:29:38 | 2020-01-31 17:29:38 |
 +----+----------------+-------+----------------+---------------------+---------------------+
 
-/**** 'to_do'テーブルを作成 ****/
-
+## 'to_do'テーブルを作成
 mysql> CREATE TABLE `to_do` (
          `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
          `category_id` bigint(20) unsigned NOT NULL,
@@ -95,8 +92,7 @@ mysql> CREATE TABLE `to_do` (
          PRIMARY KEY (`id`)
        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-/**** 'to_do'テーブルが作られたことを確認 ****/
-
+## 'to_do'テーブルが作られたことを確認
 mysql> SHOW TABLES;
 +------------------------+
 | Tables_in_to_do_sample |
@@ -106,15 +102,12 @@ mysql> SHOW TABLES;
 +------------------------+
 2 rows in set
 
-
-/**** 'to_do'テーブルのサンプルデータ挿入 ****/
-
+## 'to_do'テーブルのサンプルデータ挿入
 mysql> INSERT INTO `to_do`(category_id,title,body) values(1, 'デザインをいい感じにする','ヘッダーのデザインをもっといい感じに');
 mysql> INSERT INTO `to_do`(category_id,title,body) values(2, 'Controllerの修正','Controller名をもっといい感じに');
 mysql> INSERT INTO `to_do`(category_id,title,body) values(3, '新しいDB環境の作成','タイトル通り');
 
-/*** データが入っているか確認 ****/
-
+## データが入っているか確認
 mysql> SELECT * FROM to_do;
 +----+-------------+--------------------------+--------------------------------------+---------------------+---------------------+
 | id | category_id | title                    | body                                 | updated_at          | created_at          |

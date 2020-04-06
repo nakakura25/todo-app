@@ -1,7 +1,6 @@
 /**
-  *
-  * to do sample project
-  *
+  * This is a sample of Todo Application.
+  * 
   */
 
 package lib.persistence
@@ -11,7 +10,7 @@ import ixias.persistence.SlickRepository
 import lib.model.User
 import slick.jdbc.JdbcProfile
 
-// UserRepository
+// UserRepository: UserTableへのクエリ発行を行うRepository層の定義
 //~~~~~~~~~~~~~~~~~~~~~~
 case class UserRepository[P <: JdbcProfile]()(implicit val driver: P)
   extends SlickRepository[User.Id, User, P]
