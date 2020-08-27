@@ -29,13 +29,13 @@ mysql> SHOW DATABASES;
 | Database           |
 +--------------------+
 | information_schema |
-| to_do_sample       |
+| to_do              |
 +--------------------+
 ```
 
 #### mysqlにサンプルデータを挿入
 ```sql
-## to_do_sample のDBを使用
+## to_do のDBを使用
 mysql> USE `to_do_sample`
 ## テーブルが空なことを確認
 mysql> SHOW TABLES;
@@ -59,16 +59,16 @@ mysql> CREATE TABLE `to_do_category` (
 
 mysql> SHOW TABLES;
 +------------------------+
-| Tables_in_to_do_sample |
+| Tables_in_to_do        |
 +------------------------+
 | to_do_category         |
 +------------------------+
 1 row in set
 
 ## 'to_do_category'テーブルのサンプルデータ挿入
-mysql> INSERT INTO to_do_category(name,slug,category_color) values('フロントエンド','front',1);
-mysql> INSERT INTO to_do_category(name,slug,category_color) values('バックエンド','back',2);
-mysql> INSERT INTO to_do_category(name,slug,category_color) values('インフラ','infra',3);
+mysql> INSERT INTO to_do_category(name,slug,color) values('フロントエンド','front',1);
+mysql> INSERT INTO to_do_category(name,slug,color) values('バックエンド','back',2);
+mysql> INSERT INTO to_do_category(name,slug,color) values('インフラ','infra',3);
 
 ## データが入っているか確認
 mysql> SELECT * FROM `to_do_category`;
@@ -103,9 +103,9 @@ mysql> SHOW TABLES;
 2 rows in set
 
 ## 'to_do'テーブルのサンプルデータ挿入
-mysql> INSERT INTO `to_do`(category_id,title,body) values(1, 'デザインをいい感じにする','ヘッダーのデザインをもっといい感じに');
-mysql> INSERT INTO `to_do`(category_id,title,body) values(2, 'Controllerの修正','Controller名をもっといい感じに');
-mysql> INSERT INTO `to_do`(category_id,title,body) values(3, '新しいDB環境の作成','タイトル通り');
+mysql> INSERT INTO `to_do`(category_id,title,body,state) values(1, 'デザインをいい感じにする','ヘッダーのデザインをもっといい感じに',0);
+mysql> INSERT INTO `to_do`(category_id,title,body,state) values(2, 'Controllerの修正','Controller名をもっといい感じに',1);
+mysql> INSERT INTO `to_do`(category_id,title,body,state) values(3, '新しいDB環境の作成','タイトル通り',2);
 
 ## データが入っているか確認
 mysql> SELECT * FROM to_do;
