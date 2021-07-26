@@ -36,12 +36,12 @@ mysql> SHOW DATABASES;
 #### mysqlにサンプルデータを挿入
 ```sql
 ## to_do のDBを使用
-mysql> USE `to_do_sample`
+mysql> USE `to_do`
 ## テーブルが空なことを確認
 mysql> SHOW TABLES;
-+------------------------+
-| Tables_in_to_do_sample |
-+------------------------+
++-----------------+
+| Tables_in_to_do |
++-----------------+
 0 rows in set
 
 ## `to_do_category` テーブル作成
@@ -58,11 +58,11 @@ mysql> CREATE TABLE `to_do_category` (
 ## `to_do_category` テーブルが作られたことを確認
 
 mysql> SHOW TABLES;
-+------------------------+
-| Tables_in_to_do        |
-+------------------------+
-| to_do_category         |
-+------------------------+
++-----------------+
+| Tables_in_to_do |
++-----------------+
+| to_do_category  |
++-----------------+
 1 row in set
 
 ## 'to_do_category'テーブルのサンプルデータ挿入
@@ -95,7 +95,7 @@ mysql> CREATE TABLE `to_do` (
 ## 'to_do'テーブルが作られたことを確認
 mysql> SHOW TABLES;
 +------------------------+
-| Tables_in_to_do_sample |
+| Tables_in_to_do        |
 +------------------------+
 | to_do                  |
 | to_do_category         |
