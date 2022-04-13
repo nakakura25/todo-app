@@ -21,7 +21,7 @@ object Category {
   type WithNoId = Entity.WithNoId[Id, Category]
   type EmbeddedId = Entity.EmbeddedId[Id, Category]
 
-  def apply(name: String, slug: String, color: Short): WithNoId = {
+  def build(name: String, slug: String, color: Short): WithNoId = {
     new Entity.WithNoId(
       new Category(
         id    = None,

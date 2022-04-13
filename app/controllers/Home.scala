@@ -11,39 +11,31 @@ import lib.model.{Category, Todo, User}
 import javax.inject._
 import play.api.mvc._
 import model.ViewValueHome
+import play.api.i18n.I18nSupport
+import util.TodoUtil
+import util.TodoUtil.categories
 
-import scala.concurrent.{Await, ExecutionContext}
-import scala.concurrent.duration.{Duration, SECONDS}
+import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.duration.{DAYS, Duration, MINUTES, SECONDS}
 import scala.util.{Failure, Success}
 
 @Singleton
 class HomeController @Inject()(
   val controllerComponents: ControllerComponents,
-)(implicit ec: ExecutionContext) extends BaseController {
+)(implicit ec: ExecutionContext) extends BaseController with I18nSupport {
+
   import lib.persistence.default._
 
-  def index() = Action { implicit req =>
+  def index() = Action async { implicit req =>
     val vv = ViewValueHome(
-      title  = "Home",
+      title = "Todo一覧",
       cssSrc = Seq("main.css"),
-      jsSrc  = Seq("main.js")
+      jsSrc = Seq("main.js")
     )
-
-    val names: Seq[String] = Await.ready(UserRepository.list(), Duration.Inf).value.get match {
-      case Success(result) => result.map(user => user.v.name)
-      case Failure(_) => Seq()
+    for {
+      todos <- TodoRepository.list().map(todos => todos.map(_.v))
+    } yield {
+      Ok(views.html.Home(vv, todos, TodoUtil.getCategories()))
     }
-    val todos: Seq[Todo] = Await.ready(TodoRepository.list(), Duration.Inf).value.get match {
-      case Success(result) => result.map(todo => todo.v)
-      case Failure(_)      => Seq()
-    }
-    val categories: Seq[Category] = Await.ready(CategoryRepository.list(), Duration.Inf).value.get match {
-      case Success(result) => result.map(cat => cat.v)
-      case Failure(_)      => Seq()
-    }
-
-    println(todos)
-    println(categories)
-    Ok(views.html.Home(vv, names))
   }
 }

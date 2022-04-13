@@ -3,14 +3,19 @@
  * to do sample project
  *
  *@
-
-@(vv: model.ViewValueCommon, names: Seq[String])
+@import lib.model.Todo
+@import lib.model.Category
+@(vv: model.ViewValueCommon, todos: Seq[Todo], categoryMap: Map[Category.Id, Category])
 @common.Default(vv){
    <ul>
-    <li><a>カテゴリー一覧</a></li>
-    <li><a>Todo一覧</a></li>
-    @for(name <- names) {
-      <p>@name</p>
+    @for(todo <- todos) {
+        <div class="card">
+          <div><label>Title:</label> @todo.title</div>
+          <div><label>Body:</label> @todo.body</div>
+          <div><label>Status:</label> @todo.state.name</div>
+          <div><label>Category:</label> @categoryMap(todo.categoryId.get).name</div>
+        </div>
     }
+    <p><a>カテゴリー</a></p>
  </ul>
 }
