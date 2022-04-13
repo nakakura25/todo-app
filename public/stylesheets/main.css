@@ -38,6 +38,12 @@ body {
   text-align:  center;
 }
 
+.card {
+  border-bottom: 1px solid rgb(56, 68, 77);
+  width:         100%;
+  padding:       5px;
+//  cursor:        pointer;
+}
 
 /******* フォームのinfoを非表示に *******/
 .info {

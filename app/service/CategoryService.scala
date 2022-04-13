@@ -1,11 +1,11 @@
-package util
+package service
 
 import lib.model.Category
 
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 
-object TodoUtil {
+object CategoryService {
   import lib.persistence.default._
   private var categories: Map[Category.Id, Category] =
     Await.result(CategoryRepository.list(), Duration.Inf)
