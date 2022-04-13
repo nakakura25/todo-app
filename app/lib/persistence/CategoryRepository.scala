@@ -18,7 +18,7 @@ case class CategoryRepository[P <: JdbcProfile]()(implicit val driver: P)
 
   override def get(id: Id): Future[Option[EntityEmbeddedId]] =
     RunDBAction(CategoryTable, "slave") { _
-      .filter(_.id == id)
+      .filter(_.id === id)
       .result.headOption
   }
 
