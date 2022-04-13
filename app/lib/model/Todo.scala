@@ -29,11 +29,11 @@ object Todo {
     case object IS_DONE     extends Status(code = 2,   name = "完了")
   }
 
-  def apply(title: String, body: String, state: Status): WithNoId = {
+  def build(categoryId: Category.Id, title: String, body: String, state: Status): WithNoId = {
     new Entity.WithNoId(
       new Todo(
         id         = None,
-        categoryId = None,
+        categoryId = Some(categoryId),
         title      = title,
         body       = body,
         state      = state
