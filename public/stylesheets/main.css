@@ -25,6 +25,10 @@ body {
   font-weight:       bold;
 }
 
+.body {
+  white-space: pre-wrap;
+}
+
 .main {
   width:      980px;
   margin:     100px auto;
@@ -38,11 +42,40 @@ body {
   text-align:  center;
 }
 
+.todo_header {
+  text-align: right;
+}
+
+.todo_header .todo_header_item {
+  display:     inline-block;
+  margin-left: 5px;
+}
+
 .card {
   border-bottom: 1px solid rgb(56, 68, 77);
   width:         100%;
   padding:       5px;
-//  cursor:        pointer;
+  cursor:        pointer;
+}
+
+.card .card_content {
+  padding: 5px;
+}
+
+.card_footer {
+  text-align: right;
+}
+
+.card_footer .card_footer_item {
+  display:     inline-block;
+  margin-left: 5px;
+}
+
+.card_footer .card_footer_item a:link,
+.card_footer .card_footer_item i {
+  color:     white;
+  font-size: 0.9em;
+  cursor:    pointer;
 }
 
 /******* フォームのinfoを非表示に *******/

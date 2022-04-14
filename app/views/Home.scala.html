@@ -5,17 +5,42 @@
  *@
 @import lib.model.Todo
 @import lib.model.Category
-@(vv: model.ViewValueCommon, todos: Seq[Todo], categoryMap: Map[Category.Id, Category])
+@(vv: model.ViewValueCommon, todos: Seq[Todo], categoryMap: Map[Category.Id, Category], colorMap: Map[Int, String])(implicit messagesProvider: MessagesProvider, requestHeader: RequestHeader)
 @common.Default(vv){
-   <ul>
+    <div class="todo_header">
+       <div class="todo_header_item">
+           <a href="@controllers.routes.HomeController.store"
+              style="text-decoration: none;">
+               <label>Todo登録</label>
+           </a>
+       </div>
+    </div>
+    <div>
     @for(todo <- todos) {
-        <div class="card">
-          <div><label>Title:</label> @todo.title</div>
-          <div><label>Body:</label> @todo.body</div>
-          <div><label>Status:</label> @todo.state.name</div>
-          <div><label>Category:</label> @categoryMap(todo.categoryId.get).name</div>
+        <div class="card" data-href="@controllers.routes.HomeController.edit(todo.id.getOrElse(0))">
+            @if(todo.categoryId.isDefined && colorMap.contains(categoryMap(todo.categoryId.get).color-1)) {
+                <div class="card_content" style="background-color: @colorMap(categoryMap(todo.categoryId.get).color-1)">
+            } else {
+                <div class="card_content">
+            }
+                <div><label>Title:</label> @todo.title</div>
+                <div class="body"><label>Body:</label> @todo.body</div>
+                <div><label>Status:</label> @todo.state.name</div>
+                @if(todo.categoryId.isDefined && categoryMap.contains(todo.categoryId.get)) {
+                    <div><label>Category:</label> @categoryMap(todo.categoryId.get).name</div>
+                } else {
+                    <div><label>Category:</label> None</div>
+                }
+            </div>
+            <div class="card_footer">
+                <div class="card_footer_item">
+                    @helper.form(action = controllers.routes.HomeController.delete(todo.id.getOrElse(0))) {
+                        @helper.CSRF.formField
+                        <label class="delete">削除</label>
+                    }
+                </div>
+            </div>
         </div>
     }
-    <p><a>カテゴリー</a></p>
- </ul>
+    </div>
 }

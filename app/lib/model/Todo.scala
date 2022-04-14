@@ -1,5 +1,7 @@
 package lib.model
 
+import play.api.data.Form
+import play.api.data.Forms._
 import ixias.model._
 import ixias.util.EnumStatus
 
@@ -15,6 +17,13 @@ case class Todo(
     updatedAt:  LocalDateTime = NOW,
     createdAt:  LocalDateTime = NOW
 ) extends EntityModel[Id]
+
+case class TodoFormData(
+    title:    String,
+    body:     String,
+    category: Long,
+    state:    Short
+)
 
 object Todo {
   val Id = the[Identity[Id]]
@@ -46,5 +55,15 @@ object Todo {
       )
     )
   }
+}
 
+object TodoForm {
+  val form: Form[TodoFormData] = Form(
+    mapping(
+      "title"    -> nonEmptyText,
+      "body"     -> nonEmptyText,
+      "category" -> longNumber,
+      "state"    -> default(shortNumber, 0.toShort)
+    )(TodoFormData.apply)(TodoFormData.unapply)
+  )
 }
