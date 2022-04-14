@@ -3,10 +3,11 @@
 
 package lib.persistence
 
-import scala.concurrent.Future
 import ixias.persistence.SlickRepository
 import lib.model.User
 import slick.jdbc.JdbcProfile
+
+import scala.concurrent.Future
 
 // UserRepository: UserTableへのクエリ発行を行うRepository層の定義
 //~~~~~~~~~~~~~~~~~~~~~~

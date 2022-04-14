@@ -1,10 +1,10 @@
 package lib.persistence.db
 
 import ixias.persistence.model.Table
+import lib.model.{Category, Todo}
 import slick.jdbc.JdbcProfile
 
 import java.time.LocalDateTime
-import lib.model.{Category, Todo}
 
 case class TodoTable[P <: JdbcProfile]()(implicit val driver: P)
     extends Table[Todo, P] {

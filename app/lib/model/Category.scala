@@ -1,11 +1,9 @@
 package lib.model
 
 import ixias.model._
-import ixias.util.EnumStatus
+import lib.model.Category._
 
 import java.time.LocalDateTime
-
-import Category._
 case class Category(
     id:        Option[Id],
     name:      String,

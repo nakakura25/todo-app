@@ -2,9 +2,8 @@ package service
 
 import lib.model.Category
 
-import scala.concurrent.{Await, Future}
-import scala.concurrent.duration.Duration
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 object CategoryService {
   import lib.persistence.default._

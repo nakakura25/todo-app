@@ -3,11 +3,11 @@
 
 package lib.persistence.db
 
-import java.time.LocalDateTime
-import slick.jdbc.JdbcProfile
 import ixias.persistence.model.Table
-
 import lib.model.User
+import slick.jdbc.JdbcProfile
+
+import java.time.LocalDateTime
 
 // UserTable: Userテーブルへのマッピングを行う
 //~~~~~~~~~~~~~~

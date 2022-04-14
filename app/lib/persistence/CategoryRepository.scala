@@ -4,7 +4,6 @@ import ixias.persistence.SlickRepository
 import lib.model.Category
 import slick.jdbc.JdbcProfile
 
-import javax.swing.JDialog
 import scala.concurrent.Future
 
 case class CategoryRepository[P <: JdbcProfile]()(implicit val driver: P)

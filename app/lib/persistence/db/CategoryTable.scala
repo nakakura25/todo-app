@@ -1,9 +1,10 @@
 package lib.persistence.db
 
-import java.time.LocalDateTime
-import slick.jdbc.JdbcProfile
 import ixias.persistence.model.Table
-import lib.model.{Category, User}
+import lib.model.Category
+import slick.jdbc.JdbcProfile
+
+import java.time.LocalDateTime
 
 case class CategoryTable[P <: JdbcProfile]()(implicit val driver: P)
     extends Table[Category, P] {

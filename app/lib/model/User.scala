@@ -10,7 +10,7 @@ import java.time.LocalDateTime
 
 // ユーザーを表すモデル
 //~~~~~~~~~~~~~~~~~~~~
-import User._
+import lib.model.User._
 case class User(
     id:        Option[Id],
     name:      String,

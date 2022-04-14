@@ -3,17 +3,15 @@
 
 package controllers
 
-import com.typesafe.config.ConfigFactory
-import lib.model.{Category, Todo, TodoForm, TodoFormData, User}
-
-import javax.inject._
-import play.api.mvc._
+import lib.model.{Category, Todo, TodoForm, TodoFormData}
 import model.ViewValueHome
 import play.api.data.Form
 import play.api.i18n.I18nSupport
+import play.api.mvc._
 import service.{CategoryService, ColorService}
 
-import scala.concurrent.{Await, ExecutionContext, Future}
+import javax.inject._
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class HomeController @Inject() (

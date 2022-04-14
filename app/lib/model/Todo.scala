@@ -1,12 +1,12 @@
 package lib.model
 
-import play.api.data.Form
-import play.api.data.Forms._
 import ixias.model._
 import ixias.util.EnumStatus
+import lib.model.Todo._
+import play.api.data.Form
+import play.api.data.Forms._
 
 import java.time.LocalDateTime
-import Todo._
 
 case class Todo(
     id:         Option[Id],
