@@ -1,11 +1,12 @@
 package lib.model
 
 import ixias.model._
-import ixias.util.EnumStatus
+import lib.model.Category._
+import play.api.data.Form
+import play.api.data.Forms.{default, mapping, nonEmptyText, shortNumber}
 
 import java.time.LocalDateTime
 
-import Category._
 case class Category(
     id:        Option[Id],
     name:      String,
@@ -14,6 +15,12 @@ case class Category(
     updatedAt: LocalDateTime = NOW,
     createdAt: LocalDateTime = NOW
 ) extends EntityModel[Id]
+
+case class CategoryFormData(
+    name:  String,
+    slug:  String,
+    color: Short
+)
 
 object Category {
   val Id = the[Identity[Id]]
@@ -31,4 +38,14 @@ object Category {
       )
     )
   }
+}
+
+object CategoryForm {
+  val form: Form[CategoryFormData] = Form(
+    mapping(
+      "name"  -> nonEmptyText,
+      "slug"  -> nonEmptyText,
+      "color" -> shortNumber
+    )(CategoryFormData.apply)(CategoryFormData.unapply)
+  )
 }

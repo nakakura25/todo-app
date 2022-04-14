@@ -1,9 +1,18 @@
 package controllers
 
-import lib.model.{Category, Todo}
+import lib.model.{
+  Category,
+  CategoryForm,
+  CategoryFormData,
+  Todo,
+  TodoForm,
+  TodoFormData
+}
 import model.ViewValueHome
+import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{AnyContent, BaseController, ControllerComponents, Request}
+import service.CategoryService
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -16,6 +25,8 @@ class CategoryController @Inject() (
     with I18nSupport {
 
   import lib.persistence.default._
+
+  val form: Form[CategoryFormData] = CategoryForm.form
 
   def index() = Action async { implicit req =>
     val vv = ViewValueHome(
@@ -32,7 +43,16 @@ class CategoryController @Inject() (
   }
 
   def register() = Action async { implicit request: Request[AnyContent] =>
-    ???
+    val vv = ViewValueHome(
+      title  = "登録画面",
+      cssSrc = Seq("store.css"),
+      jsSrc  = Seq("store.js")
+    )
+    for {
+      _ <- CategoryRepository.list()
+    } yield {
+      Ok(views.html.category.store(vv, form))
+    }
   }
 
   def store() = Action async { implicit request: Request[AnyContent] =>
@@ -40,7 +60,31 @@ class CategoryController @Inject() (
   }
 
   def edit(id: Long) = Action async { implicit request: Request[AnyContent] =>
-    ???
+    val vv = ViewValueHome(
+      title  = "更新画面",
+      cssSrc = Seq("store.css"),
+      jsSrc  = Seq("store.js")
+    )
+    for {
+      categryOption <- CategoryRepository.get(Category.Id(id))
+    } yield {
+      categryOption match {
+        case Some(category) =>
+          Ok(
+            views.html.category.edit(
+              vv,
+              form.fill(
+                CategoryFormData(
+                  category.v.name,
+                  category.v.slug,
+                  category.v.color
+                )
+              )
+            )
+          )
+        case None           => NotFound(views.html.error.page404(vv))
+      }
+    }
   }
 
   def update(id: Long) =
