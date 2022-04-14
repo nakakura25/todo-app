@@ -51,6 +51,15 @@ body {
   margin-left: 5px;
 }
 
+.todo_footer {
+  text-align: right;
+}
+
+.todo_footer .todo_footer_item {
+  display:     inline-block;
+  margin-left: 5px;
+}
+
 .card {
   border-bottom: 1px solid rgb(56, 68, 77);
   width:         100%;
