@@ -32,9 +32,10 @@ class HomeController @Inject() (
       jsSrc  = Seq("main.js")
     )
     for {
-      todos <- TodoRepository.list().map(todos => todos.map(_.v))
+      todos      <- TodoRepository.list().map(todos => todos.map(_.v))
+      categories <- CategoryService.getCategories()
     } yield {
-      Ok(views.html.Home(vv, todos, CategoryService.getCategories()))
+      Ok(views.html.Home(vv, todos, categories))
     }
   }
 
