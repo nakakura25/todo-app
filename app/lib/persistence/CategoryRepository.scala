@@ -8,8 +8,8 @@ import javax.swing.JDialog
 import scala.concurrent.Future
 
 case class CategoryRepository[P <: JdbcProfile]()(implicit val driver: P)
-  extends SlickRepository[Category.Id, Category, P]
-  with db.SlickResourceProvider[P] {
+    extends SlickRepository[Category.Id, Category, P]
+    with db.SlickResourceProvider[P] {
 
   import api._
 
@@ -17,25 +17,26 @@ case class CategoryRepository[P <: JdbcProfile]()(implicit val driver: P)
     RunDBAction(CategoryTable, "slave") { _.result }
 
   override def get(id: Id): Future[Option[EntityEmbeddedId]] =
-    RunDBAction(CategoryTable, "slave") { _
-      .filter(_.id === id)
-      .result.headOption
-  }
+    RunDBAction(CategoryTable, "slave") {
+      _.filter(_.id === id).result.headOption
+    }
 
   override def add(entity: EntityWithNoId): Future[Id] =
     RunDBAction(CategoryTable) { slick =>
       slick returning slick.map(_.id) += entity.v
-  }
+    }
 
-  override def update(entity: EntityEmbeddedId): Future[Option[EntityEmbeddedId]] =
+  override def update(
+      entity: EntityEmbeddedId
+  ): Future[Option[EntityEmbeddedId]] =
     RunDBAction(CategoryTable) { slick =>
       val row = slick.filter(_.id === entity.id)
       for {
         old <- row.result.headOption
-        _ <- old match {
-          case None => DBIO.successful(0)
-          case Some(_) => row.update(entity.v)
-        }
+        _   <- old match {
+                 case None    => DBIO.successful(0)
+                 case Some(_) => row.update(entity.v)
+               }
       } yield old
     }
 
@@ -44,10 +45,10 @@ case class CategoryRepository[P <: JdbcProfile]()(implicit val driver: P)
       val row = slick.filter(_.id === id)
       for {
         old <- row.result.headOption
-        _ <- old match {
-          case None => DBIO.successful(0)
-          case Some(_) => row.delete
-        }
+        _   <- old match {
+                 case None    => DBIO.successful(0)
+                 case Some(_) => row.delete
+               }
       } yield old
     }
 }

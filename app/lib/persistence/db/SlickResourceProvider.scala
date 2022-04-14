@@ -1,6 +1,4 @@
-/**
-  * This is a sample of Todo Application.
-  * 
+/** This is a sample of Todo Application.
   */
 
 package lib.persistence.db

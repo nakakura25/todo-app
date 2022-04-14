@@ -7,18 +7,18 @@ import java.time.LocalDateTime
 
 import Category._
 case class Category(
-  id:         Option[Id],
-  name:       String,
-  slug:       String,
-  color:      Short,
-  updatedAt:  LocalDateTime = NOW,
-  createdAt:  LocalDateTime = NOW
+    id:        Option[Id],
+    name:      String,
+    slug:      String,
+    color:     Short,
+    updatedAt: LocalDateTime = NOW,
+    createdAt: LocalDateTime = NOW
 ) extends EntityModel[Id]
 
 object Category {
   val Id = the[Identity[Id]]
-  type Id = Long @@ Category
-  type WithNoId = Entity.WithNoId[Id, Category]
+  type Id         = Long @@ Category
+  type WithNoId   = Entity.WithNoId[Id, Category]
   type EmbeddedId = Entity.EmbeddedId[Id, Category]
 
   def build(name: String, slug: String, color: Short): WithNoId = {

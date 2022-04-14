@@ -1,8 +1,5 @@
-/**
- *
- * to do sample project
- *
- */
+/** to do sample project
+  */
 
 package controllers
 
@@ -20,17 +17,19 @@ import scala.concurrent.duration.{DAYS, Duration, MINUTES, SECONDS}
 import scala.util.{Failure, Success}
 
 @Singleton
-class HomeController @Inject()(
-  val controllerComponents: ControllerComponents,
-)(implicit ec: ExecutionContext) extends BaseController with I18nSupport {
+class HomeController @Inject() (
+    val controllerComponents: ControllerComponents
+)(implicit ec:                ExecutionContext)
+    extends BaseController
+    with I18nSupport {
 
   import lib.persistence.default._
 
   def index() = Action async { implicit req =>
     val vv = ViewValueHome(
-      title = "Todo一覧",
+      title  = "Todo一覧",
       cssSrc = Seq("main.css"),
-      jsSrc = Seq("main.js")
+      jsSrc  = Seq("main.js")
     )
     for {
       todos <- TodoRepository.list().map(todos => todos.map(_.v))
@@ -39,52 +38,57 @@ class HomeController @Inject()(
     }
   }
 
-  /**
-   * 登録画面の表示用
-   */
+  /** 登録画面の表示用
+    */
   def register() = Action { implicit request: Request[AnyContent] =>
-    val vv = ViewValueHome(
-      title = "登録画面",
+    val vv                  = ViewValueHome(
+      title  = "登録画面",
       cssSrc = Seq("store.css"),
-      jsSrc = Seq("store.js")
+      jsSrc  = Seq("store.js")
     )
     // insert test
-    val todo:Todo#WithNoId = Todo.build(Category.Id(1L), "test title", "test body", Todo.Status.IS_NOT_YET)
-    val id = TodoRepository.add(todo)
+    val todo: Todo#WithNoId = Todo.build(
+      Category.Id(1L),
+      "test title",
+      "test body",
+      Todo.Status.IS_NOT_YET
+    )
+    val id                  = TodoRepository.add(todo)
     id.onComplete {
-      case Success(value) => println(s"register test: ${value}")
+      case Success(value)     => println(s"register test: ${value}")
       case Failure(exception) => throw exception
     }
     Redirect(routes.HomeController.index())
-    //    Ok(views.html.todo.store(vv))
-   }
+  //    Ok(views.html.todo.store(vv))
+  }
 
   def edit(id: Long) = Action async { implicit request: Request[AnyContent] =>
     val vv = ViewValueHome(
-      title = "更新画面",
+      title  = "更新画面",
       cssSrc = Seq("store.css"),
-      jsSrc = Seq("store.js")
+      jsSrc  = Seq("store.js")
     )
 
     // update test
     val todo: Future[Option[Todo#EmbeddedId]] = TodoRepository.get(Todo.Id(id))
-    val testTodo: Todo#EmbeddedId = Await.ready(todo, Duration.Inf).value.get match {
-      case Success(value) => value.get.map(_.copy(title = "update test"))
-      case Failure(exception) => throw exception
-    }
+    val testTodo: Todo#EmbeddedId             =
+      Await.ready(todo, Duration.Inf).value.get match {
+        case Success(value)     => value.get.map(_.copy(title = "update test"))
+        case Failure(exception) => throw exception
+      }
     for {
       _ <- TodoRepository.update(testTodo)
     } yield {
       Redirect(routes.HomeController.index())
     }
-    //    Ok(views.html.edit.store(vv))
+  //    Ok(views.html.edit.store(vv))
   }
 
   def delete(id: Long) = Action async { implicit request: Request[AnyContent] =>
     val vv = ViewValueHome(
-      title = "登録画面",
+      title  = "登録画面",
       cssSrc = Seq("store.css"),
-      jsSrc = Seq("store.js")
+      jsSrc  = Seq("store.js")
     )
     for {
       _ <- TodoRepository.remove(Todo.Id(id))
