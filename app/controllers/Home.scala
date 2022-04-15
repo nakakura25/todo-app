@@ -24,42 +24,47 @@ class HomeController @Inject() (
   import lib.persistence.default._
 
   val form: Form[TodoFormData] = TodoForm.form
+  val vvList                   = ViewValueHome(
+    title  = "Todo一覧",
+    cssSrc = Seq("main.css"),
+    jsSrc  = Seq("main.js")
+  )
+  val vvStore                  = ViewValueHome(
+    title  = "登録画面",
+    cssSrc = Seq("store.css"),
+    jsSrc  = Seq("store.js")
+  )
+  val vvUpdate                 = ViewValueHome(
+    title  = "更新画面",
+    cssSrc = Seq("store.css"),
+    jsSrc  = Seq("store.js")
+  )
+  val vv404                    = ViewValueHome(
+    title  = "404 Not Found",
+    cssSrc = Seq("store.css"),
+    jsSrc  = Seq("store.js")
+  )
 
   def index() = Action async { implicit req =>
-    val vv = ViewValueHome(
-      title  = "Todo一覧",
-      cssSrc = Seq("main.css"),
-      jsSrc  = Seq("main.js")
-    )
     for {
       todos      <- TodoRepository.list().map(todos => todos.map(_.v))
       categories <- CategoryService.getCategoryMap()
     } yield {
-      Ok(views.html.Home(vv, todos, categories, ColorService.getColorMap()))
+      Ok(views.html.Home(vvList, todos, categories, ColorService.getColorMap()))
     }
   }
 
   /** 登録画面の表示用
     */
   def register() = Action async { implicit request: Request[AnyContent] =>
-    val vv = ViewValueHome(
-      title  = "登録画面",
-      cssSrc = Seq("store.css"),
-      jsSrc  = Seq("store.js")
-    )
     for {
       categoryOption <- CategoryService.getCategoryOptions()
     } yield {
-      Ok(views.html.todo.store(vv, form, categoryOption))
+      Ok(views.html.todo.store(vvStore, form, categoryOption))
     }
   }
 
   def store() = Action async { implicit request: Request[AnyContent] =>
-    val vv = ViewValueHome(
-      title  = "登録画面",
-      cssSrc = Seq("store.css"),
-      jsSrc  = Seq("store.js")
-    )
     form
       .bindFromRequest()
       .fold(
@@ -67,7 +72,7 @@ class HomeController @Inject() (
           println(formWithErrors)
           Future
             .successful(
-              BadRequest(views.html.todo.store(vv, formWithErrors, Seq()))
+              BadRequest(views.html.todo.store(vvStore, formWithErrors, Seq()))
             )
         },
         (todoFormData: TodoFormData) => {
@@ -88,11 +93,6 @@ class HomeController @Inject() (
   }
 
   def edit(id: Long) = Action async { implicit request: Request[AnyContent] =>
-    val vv = ViewValueHome(
-      title  = "更新画面",
-      cssSrc = Seq("store.css"),
-      jsSrc  = Seq("store.js")
-    )
     for {
       todoOption      <- TodoRepository.get(Todo.Id(id))
       categoryOptions <- CategoryService.getCategoryOptions()
@@ -103,13 +103,13 @@ class HomeController @Inject() (
         case Some(todo) =>
           Ok(
             views.html.todo.edit(
-              vv,
+              vvUpdate,
               form.fill(
                 TodoFormData(
                   todo.v.title,
                   todo.v.body,
-                  todo.v.categoryId.get.toLong,
-                  todo.v.state.code
+                  todo.v.categoryId.getOrElse(Category.Id(0L)),
+                  todo.v.state
                 )
               ),
               categoryOptions,
@@ -117,17 +117,12 @@ class HomeController @Inject() (
               id
             )
           )
-        case None       => NotFound(views.html.error.page404(vv))
+        case None       => NotFound(views.html.error.page404(vv404))
       }
     }
   }
 
   def update(id: Long) = Action async { implicit request: Request[AnyContent] =>
-    val vv = ViewValueHome(
-      title  = "更新画面",
-      cssSrc = Seq("store.css"),
-      jsSrc  = Seq("store.js")
-    )
     form
       .bindFromRequest()
       .fold(
@@ -136,7 +131,7 @@ class HomeController @Inject() (
           Future
             .successful(
               BadRequest(
-                views.html.todo.edit(vv, formWithErrors, Seq(), Seq(), id)
+                views.html.todo.edit(vvUpdate, formWithErrors, Seq(), Seq(), id)
               )
             )
         },
@@ -145,10 +140,10 @@ class HomeController @Inject() (
             _ <- TodoRepository.update(
                    Todo(
                      Some(Todo.Id(id)),
-                     Some(Category.Id(todoFormData.category)),
+                     Some(todoFormData.category),
                      todoFormData.title,
                      todoFormData.body,
-                     Todo.Status(todoFormData.state)
+                     todoFormData.state
                    ).toEmbeddedId
                  )
           } yield {
