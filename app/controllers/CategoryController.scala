@@ -47,7 +47,9 @@ class CategoryController @Inject() (
       categories <-
         CategoryRepository.list().map(categorise => categorise.map(_.v))
     } yield {
-      Ok(views.html.category.list(vvList, categories))
+      Ok(
+        views.html.category.list(vvList, categories, ColorService.getColorMap())
+      )
     }
   }
 

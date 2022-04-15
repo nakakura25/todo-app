@@ -1,5 +1,5 @@
 @import lib.model.Category
-@(vv: model.ViewValueCommon, categories: Seq[Category])(implicit messagesProvider: MessagesProvider, requestHeader: RequestHeader)
+@(vv: model.ViewValueCommon, categories: Seq[Category], colorMap: Map[Int, String])(implicit messagesProvider: MessagesProvider, requestHeader: RequestHeader)
 @common.Default(vv){
     <div class="todo_header">
         <div class="todo_header_item">
@@ -14,7 +14,11 @@
         <div class="card_content">
             <div><label>Name:</label> @cat.name</div>
             <div><label>Slug:</label> @cat.slug</div>
-            <div><label>Color:</label> @cat.color</div>
+            @if(colorMap.contains(cat.color)) {
+                <div style="background-color: @colorMap(cat.color)"><label>Color:</label> @colorMap(cat.color)</div>
+            } else {
+                <div><label>Color:</label> @cat.color</div>
+            }
         </div>
         <div class="card_footer">
             <div class="card_footer_item">
