@@ -14,7 +14,7 @@ object CategoryForm {
     mapping(
       "name"  -> nonEmptyText,
       "slug"  -> nonEmptyText.verifying(
-        error      = "only alphabet and digit",
+        error      = "only alphabet or digit",
         constraint = _.matches("[0-9a-zA-Z]+")
       ),
       "color" -> shortNumber
