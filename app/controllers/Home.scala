@@ -3,7 +3,8 @@
 
 package controllers
 
-import lib.model.{Category, Todo, TodoForm, TodoFormData}
+import lib.model.form.{TodoForm, TodoFormData}
+import lib.model.{Category, Todo}
 import model.ViewValueHome
 import play.api.data.Form
 import play.api.i18n.I18nSupport

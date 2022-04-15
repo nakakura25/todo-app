@@ -1,5 +1,4 @@
-@import lib.model.TodoFormData
-@import lib.model.Category
+@import lib.model.form.TodoFormData
 @(vv: model.ViewValueCommon, form: Form[TodoFormData], categoryOption: Seq[(String, String)], statusOption: Seq[(String, String)], id: Long)(implicit messagesProvider: MessagesProvider, requestHeader: RequestHeader)
 @common.Default(vv) {
     @helper.form(action = controllers.routes.HomeController.update(id)) {
