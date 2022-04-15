@@ -13,7 +13,10 @@ object CategoryForm {
   val form: Form[CategoryFormData] = Form(
     mapping(
       "name"  -> nonEmptyText,
-      "slug"  -> nonEmptyText,
+      "slug"  -> nonEmptyText.verifying(
+        error      = "only alphabet and digit",
+        constraint = _.matches("[0-9a-zA-Z]+")
+      ),
       "color" -> shortNumber
     )(CategoryFormData.apply)(CategoryFormData.unapply)
   )

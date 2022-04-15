@@ -64,7 +64,8 @@ class CategoryController @Inject() (
         (formWithErrors: Form[CategoryFormData]) => {
           Future.successful(
             BadRequest(
-              views.html.category.store(vvStore, formWithErrors, Seq())
+              views.html.category
+                .store(vvStore, formWithErrors, ColorService.getColorOption())
             )
           )
         },
@@ -117,7 +118,12 @@ class CategoryController @Inject() (
           (formWithErrors: Form[CategoryFormData]) => {
             Future.successful(
               BadRequest(
-                views.html.category.edit(vvUpdate, formWithErrors, Seq(), id)
+                views.html.category.edit(
+                  vvUpdate,
+                  formWithErrors,
+                  ColorService.getColorOption(),
+                  id
+                )
               )
             )
           },
