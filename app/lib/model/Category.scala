@@ -3,7 +3,7 @@ package lib.model
 import ixias.model._
 import lib.model.Category._
 import play.api.data.Form
-import play.api.data.Forms.{default, mapping, nonEmptyText, shortNumber}
+import play.api.data.Forms.{mapping, nonEmptyText, shortNumber}
 
 import java.time.LocalDateTime
 
