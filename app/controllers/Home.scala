@@ -31,18 +31,18 @@ class HomeController @Inject() (
   )
   val vvStore                  = ViewValueHome(
     title  = "登録画面",
-    cssSrc = Seq("store.css"),
-    jsSrc  = Seq("store.js")
+    cssSrc = Seq(),
+    jsSrc  = Seq()
   )
   val vvUpdate                 = ViewValueHome(
     title  = "更新画面",
-    cssSrc = Seq("store.css"),
-    jsSrc  = Seq("store.js")
+    cssSrc = Seq(),
+    jsSrc  = Seq()
   )
   val vv404                    = ViewValueHome(
     title  = "404 Not Found",
-    cssSrc = Seq("store.css"),
-    jsSrc  = Seq("store.js")
+    cssSrc = Seq(),
+    jsSrc  = Seq()
   )
 
   def index() = Action async { implicit req =>

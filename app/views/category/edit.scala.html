@@ -1,5 +1,5 @@
 @import lib.model.form.CategoryFormData
-@(vv: model.ViewValueCommon, form: Form[CategoryFormData])(implicit messagesProvider: MessagesProvider, requestHeader: RequestHeader)
+@(vv: model.ViewValueCommon, form: Form[CategoryFormData], colorOption: Seq[(String, String)])(implicit messagesProvider: MessagesProvider, requestHeader: RequestHeader)
 @common.Default(vv) {
     @helper.form(action = controllers.routes.CategoryController.store) {
     @helper.CSRF.formField
@@ -11,11 +11,7 @@
         '_label -> "Body", '_showConstrainsts -> false)
     @helper.select(
         field = form("color"),
-        options = Seq(
-            "1" -> "1",
-            "2" -> "2",
-            "3" -> "3"
-        ),
+        options = colorOption,
     )
     <input type="submit" value="更新" />
     }

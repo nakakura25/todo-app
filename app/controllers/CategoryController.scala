@@ -6,6 +6,7 @@ import model.ViewValueHome
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{AnyContent, BaseController, ControllerComponents, Request}
+import service.ColorService
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -27,18 +28,18 @@ class CategoryController @Inject() (
   )
   val vvStore                      = ViewValueHome(
     title  = "登録画面",
-    cssSrc = Seq("store.css"),
-    jsSrc  = Seq("store.js")
+    cssSrc = Seq(),
+    jsSrc  = Seq("categoryform.js")
   )
   val vvUpdate                     = ViewValueHome(
     title  = "更新画面",
-    cssSrc = Seq("store.css"),
-    jsSrc  = Seq("store.js")
+    cssSrc = Seq(),
+    jsSrc  = Seq("categoryform.js")
   )
   val vv404                        = ViewValueHome(
     title  = "404 Not Found",
-    cssSrc = Seq("store.css"),
-    jsSrc  = Seq("store.js")
+    cssSrc = Seq(),
+    jsSrc  = Seq()
   )
 
   def index() = Action async { implicit req =>
@@ -54,7 +55,9 @@ class CategoryController @Inject() (
     for {
       _ <- CategoryRepository.list()
     } yield {
-      Ok(views.html.category.store(vvStore, form))
+      Ok(
+        views.html.category.store(vvStore, form, ColorService.getColorOption())
+      )
     }
   }
 
@@ -77,7 +80,8 @@ class CategoryController @Inject() (
                   category.v.slug,
                   category.v.color
                 )
-              )
+              ),
+              ColorService.getColorOption()
             )
           )
         case None           => NotFound(views.html.error.page404(vv404))

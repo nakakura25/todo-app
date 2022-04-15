@@ -14,4 +14,7 @@ object ColorService {
       .zipWithIndex
       .map(t => (t._2 + 1, t._1))
       .toMap
+
+  def getColorOption(): Seq[(String, String)] =
+    getColorMap().map(k => (k._1.toString, k._2)).toSeq
 }
