@@ -5,13 +5,14 @@
         @helper.CSRF.formField
         @helper.textarea(form("title"),
             'rows -> 1, 'cols -> 40,
-            '_label -> "title", '_showConstrainsts -> false)
+            '_label -> "Title", '_showConstrainsts -> false)
         @helper.textarea(form("body"),
             'rows -> 3, 'cols -> 40,
             '_label -> "Body", '_showConstrainsts -> false)
         @helper.select(
             field = form("category"),
             options = categoryOption,
+            '_label -> "Category",
         )
         <input type="submit" value="登録" />
     }

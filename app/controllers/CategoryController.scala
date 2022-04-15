@@ -22,7 +22,7 @@ class CategoryController @Inject() (
 
   val form: Form[CategoryFormData] = CategoryForm.form
   val vvList                       = ViewValueHome(
-    title  = "Todo一覧",
+    title  = "カテゴリー一覧",
     cssSrc = Seq("main.css"),
     jsSrc  = Seq("main.js")
   )
