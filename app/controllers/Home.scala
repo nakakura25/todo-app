@@ -69,7 +69,6 @@ class HomeController @Inject() (
       .bindFromRequest()
       .fold(
         (formWithErrors: Form[TodoFormData]) => {
-          println(formWithErrors)
           Future
             .successful(
               BadRequest(views.html.todo.store(vvStore, formWithErrors, Seq()))
@@ -79,7 +78,7 @@ class HomeController @Inject() (
           for {
             _ <- TodoRepository.add(
                    Todo.build(
-                     Category.Id(todoFormData.category),
+                     todoFormData.category,
                      todoFormData.title,
                      todoFormData.body,
                      Todo.Status.IS_NOT_YET
@@ -127,7 +126,6 @@ class HomeController @Inject() (
       .bindFromRequest()
       .fold(
         (formWithErrors: Form[TodoFormData]) => {
-          println(formWithErrors)
           Future
             .successful(
               BadRequest(

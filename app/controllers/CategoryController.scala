@@ -9,7 +9,7 @@ import play.api.mvc.{AnyContent, BaseController, ControllerComponents, Request}
 import service.ColorService
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class CategoryController @Inject() (
@@ -51,18 +51,35 @@ class CategoryController @Inject() (
     }
   }
 
-  def register() = Action async { implicit request: Request[AnyContent] =>
-    for {
-      _ <- CategoryRepository.list()
-    } yield {
-      Ok(
-        views.html.category.store(vvStore, form, ColorService.getColorOption())
-      )
-    }
+  def register() = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.category.store(vvStore, form, ColorService.getColorOption()))
   }
 
   def store() = Action async { implicit request: Request[AnyContent] =>
-    ???
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[CategoryFormData]) => {
+          Future.successful(
+            BadRequest(
+              views.html.category.store(vvStore, formWithErrors, Seq())
+            )
+          )
+        },
+        (categoryForm: CategoryFormData) => {
+          for {
+            _ <- CategoryRepository.add(
+                   Category.build(
+                     categoryForm.name,
+                     categoryForm.slug,
+                     categoryForm.color
+                   )
+                 )
+          } yield {
+            Redirect(routes.CategoryController.index())
+          }
+        }
+      )
   }
 
   def edit(id: Long) = Action async { implicit request: Request[AnyContent] =>
@@ -91,7 +108,31 @@ class CategoryController @Inject() (
 
   def update(id: Long) =
     Action async { implicit request: Request[AnyContent] =>
-      ???
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[CategoryFormData]) => {
+            Future.successful(
+              BadRequest(
+                views.html.category.edit(vvUpdate, formWithErrors, Seq())
+              )
+            )
+          },
+          (categoryFormData: CategoryFormData) => {
+            for {
+              _ <- CategoryRepository.update(
+                     Category(
+                       Some(Category.Id(id)),
+                       categoryFormData.name,
+                       categoryFormData.slug,
+                       categoryFormData.color
+                     ).toEmbeddedId
+                   )
+            } yield {
+              Redirect(routes.CategoryController.index())
+            }
+          }
+        )
     }
 
   def delete(id: Long) = Action async { implicit request: Request[AnyContent] =>
