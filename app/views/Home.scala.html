@@ -18,7 +18,9 @@
     <div>
     @for(todo <- todos) {
         <div class="card" data-href="@controllers.routes.HomeController.edit(todo.id.getOrElse(0))">
-            @if(todo.categoryId.isDefined && colorMap.contains(categoryMap(todo.categoryId.get).color)) {
+            @if(todo.categoryId.isDefined &&
+               categoryMap.contains(todo.categoryId.get) &&
+               colorMap.contains(categoryMap(todo.categoryId.get).color)) {
                 <div class="card_content" style="background-color: @colorMap(categoryMap(todo.categoryId.get).color)">
             } else {
                 <div class="card_content">

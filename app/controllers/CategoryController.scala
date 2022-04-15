@@ -98,7 +98,8 @@ class CategoryController @Inject() (
                   category.v.color
                 )
               ),
-              ColorService.getColorOption()
+              ColorService.getColorOption(),
+              id
             )
           )
         case None           => NotFound(views.html.error.page404(vv404))
@@ -114,7 +115,7 @@ class CategoryController @Inject() (
           (formWithErrors: Form[CategoryFormData]) => {
             Future.successful(
               BadRequest(
-                views.html.category.edit(vvUpdate, formWithErrors, Seq())
+                views.html.category.edit(vvUpdate, formWithErrors, Seq(), id)
               )
             )
           },
