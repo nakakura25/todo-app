@@ -9,9 +9,14 @@
     @helper.textarea(form("slug"),
         'rows -> 3, 'cols -> 40,
         '_label -> "Body", '_showConstrainsts -> false)
-    @helper.textarea(form("color"),
-        'rows -> 3, 'cols -> 40,
-        '_label -> "Body", '_showConstrainsts -> false)
+    @helper.select(
+        field = form("color"),
+        options = Seq(
+            "1" -> "1",
+            "2" -> "2",
+            "3" -> "3"
+        ),
+    )
     <input type="submit" value="登録" />
     }
 }

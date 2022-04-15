@@ -12,6 +12,6 @@ object ColorService {
       .asScala
       .map(t => t)
       .zipWithIndex
-      .map(t => t._2 -> t._1)
+      .map(t => (t._2 + 1, t._1))
       .toMap
 }
