@@ -1,18 +1,11 @@
 package controllers
 
-import lib.model.{
-  Category,
-  CategoryForm,
-  CategoryFormData,
-  Todo,
-  TodoForm,
-  TodoFormData
-}
+import lib.model.Category
+import lib.model.form.{CategoryForm, CategoryFormData}
 import model.ViewValueHome
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{AnyContent, BaseController, ControllerComponents, Request}
-import service.CategoryService
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -27,31 +20,41 @@ class CategoryController @Inject() (
   import lib.persistence.default._
 
   val form: Form[CategoryFormData] = CategoryForm.form
+  val vvList                       = ViewValueHome(
+    title  = "Todo一覧",
+    cssSrc = Seq("main.css"),
+    jsSrc  = Seq("main.js")
+  )
+  val vvStore                      = ViewValueHome(
+    title  = "登録画面",
+    cssSrc = Seq("store.css"),
+    jsSrc  = Seq("store.js")
+  )
+  val vvUpdate                     = ViewValueHome(
+    title  = "更新画面",
+    cssSrc = Seq("store.css"),
+    jsSrc  = Seq("store.js")
+  )
+  val vv404                        = ViewValueHome(
+    title  = "404 Not Found",
+    cssSrc = Seq("store.css"),
+    jsSrc  = Seq("store.js")
+  )
 
   def index() = Action async { implicit req =>
-    val vv = ViewValueHome(
-      title  = "カテゴリー一覧",
-      cssSrc = Seq("main.css"),
-      jsSrc  = Seq("main.js")
-    )
     for {
       categories <-
         CategoryRepository.list().map(categorise => categorise.map(_.v))
     } yield {
-      Ok(views.html.category.list(vv, categories))
+      Ok(views.html.category.list(vvList, categories))
     }
   }
 
   def register() = Action async { implicit request: Request[AnyContent] =>
-    val vv = ViewValueHome(
-      title  = "登録画面",
-      cssSrc = Seq("store.css"),
-      jsSrc  = Seq("store.js")
-    )
     for {
       _ <- CategoryRepository.list()
     } yield {
-      Ok(views.html.category.store(vv, form))
+      Ok(views.html.category.store(vvStore, form))
     }
   }
 
@@ -60,11 +63,6 @@ class CategoryController @Inject() (
   }
 
   def edit(id: Long) = Action async { implicit request: Request[AnyContent] =>
-    val vv = ViewValueHome(
-      title  = "更新画面",
-      cssSrc = Seq("store.css"),
-      jsSrc  = Seq("store.js")
-    )
     for {
       categryOption <- CategoryRepository.get(Category.Id(id))
     } yield {
@@ -72,7 +70,7 @@ class CategoryController @Inject() (
         case Some(category) =>
           Ok(
             views.html.category.edit(
-              vv,
+              vvUpdate,
               form.fill(
                 CategoryFormData(
                   category.v.name,
@@ -82,7 +80,7 @@ class CategoryController @Inject() (
               )
             )
           )
-        case None           => NotFound(views.html.error.page404(vv))
+        case None           => NotFound(views.html.error.page404(vv404))
       }
     }
   }

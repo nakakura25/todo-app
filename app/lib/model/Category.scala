@@ -2,8 +2,6 @@ package lib.model
 
 import ixias.model._
 import lib.model.Category._
-import play.api.data.Form
-import play.api.data.Forms.{mapping, nonEmptyText, shortNumber}
 
 import java.time.LocalDateTime
 
@@ -15,12 +13,6 @@ case class Category(
     updatedAt: LocalDateTime = NOW,
     createdAt: LocalDateTime = NOW
 ) extends EntityModel[Id]
-
-case class CategoryFormData(
-    name:  String,
-    slug:  String,
-    color: Short
-)
 
 object Category {
   val Id = the[Identity[Id]]
@@ -38,14 +30,4 @@ object Category {
       )
     )
   }
-}
-
-object CategoryForm {
-  val form: Form[CategoryFormData] = Form(
-    mapping(
-      "name"  -> nonEmptyText,
-      "slug"  -> nonEmptyText,
-      "color" -> shortNumber
-    )(CategoryFormData.apply)(CategoryFormData.unapply)
-  )
 }

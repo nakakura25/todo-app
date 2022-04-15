@@ -1,4 +1,4 @@
-@import lib.model.CategoryFormData
+@import lib.model.form.CategoryFormData
 @(vv: model.ViewValueCommon, form: Form[CategoryFormData])(implicit messagesProvider: MessagesProvider, requestHeader: RequestHeader)
 @common.Default(vv) {
     @helper.form(action = controllers.routes.CategoryController.store) {
