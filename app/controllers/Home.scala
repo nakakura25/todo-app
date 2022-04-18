@@ -69,10 +69,13 @@ class HomeController @Inject() (
       .bindFromRequest()
       .fold(
         (formWithErrors: Form[TodoFormData]) => {
-          Future
-            .successful(
-              BadRequest(views.html.todo.store(vvStore, formWithErrors, Seq()))
+          for {
+            categoryOption <- CategoryService.getCategoryOptions()
+          } yield {
+            BadRequest(
+              views.html.todo.store(vvStore, formWithErrors, categoryOption)
             )
+          }
         },
         (todoFormData: TodoFormData) => {
           for {
@@ -126,12 +129,22 @@ class HomeController @Inject() (
       .bindFromRequest()
       .fold(
         (formWithErrors: Form[TodoFormData]) => {
-          Future
-            .successful(
-              BadRequest(
-                views.html.todo.edit(vvUpdate, formWithErrors, Seq(), Seq(), id)
+          for {
+            categoryOptions <- CategoryService.getCategoryOptions()
+          } yield {
+            val statusOption =
+              Todo.Status.values
+                .map(status => (status.code.toString, status.name))
+            BadRequest(
+              views.html.todo.edit(
+                vvUpdate,
+                formWithErrors,
+                categoryOptions,
+                statusOption,
+                id
               )
             )
+          }
         },
         (todoFormData: TodoFormData) => {
           for {
