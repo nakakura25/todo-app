@@ -36,8 +36,6 @@ class TodoApiController @Inject() (
     for {
       categories <- categoryService.getCategoryMapToJson()
     } yield {
-      println(categories)
-      println(Json.toJson(categories))
       Ok(Json.toJson(categories))
     }
   }
