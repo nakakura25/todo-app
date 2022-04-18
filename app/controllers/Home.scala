@@ -16,7 +16,8 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class HomeController @Inject() (
-    val controllerComponents: ControllerComponents
+    val controllerComponents: ControllerComponents,
+    val categoryService:      CategoryService
 )(implicit ec:                ExecutionContext)
     extends BaseController
     with I18nSupport {
@@ -48,7 +49,7 @@ class HomeController @Inject() (
   def index() = Action async { implicit req =>
     for {
       todos      <- TodoRepository.list().map(todos => todos.map(_.v))
-      categories <- CategoryService.getCategoryMap()
+      categories <- categoryService.getCategoryMap()
     } yield {
       Ok(views.html.Home(vvList, todos, categories, ColorService.getColorMap()))
     }
@@ -58,7 +59,7 @@ class HomeController @Inject() (
     */
   def register() = Action async { implicit request: Request[AnyContent] =>
     for {
-      categoryOption <- CategoryService.getCategoryOptions()
+      categoryOption <- categoryService.getCategoryOptions()
     } yield {
       Ok(views.html.todo.store(vvStore, form, categoryOption))
     }
@@ -70,7 +71,7 @@ class HomeController @Inject() (
       .fold(
         (formWithErrors: Form[TodoFormData]) => {
           for {
-            categoryOption <- CategoryService.getCategoryOptions()
+            categoryOption <- categoryService.getCategoryOptions()
           } yield {
             BadRequest(
               views.html.todo.store(vvStore, formWithErrors, categoryOption)
@@ -97,7 +98,7 @@ class HomeController @Inject() (
   def edit(id: Long) = Action async { implicit request: Request[AnyContent] =>
     for {
       todoOption      <- TodoRepository.get(Todo.Id(id))
-      categoryOptions <- CategoryService.getCategoryOptions()
+      categoryOptions <- categoryService.getCategoryOptions()
     } yield {
       val statusOption =
         Todo.Status.values.map(status => (status.code.toString, status.name))
@@ -130,7 +131,7 @@ class HomeController @Inject() (
       .fold(
         (formWithErrors: Form[TodoFormData]) => {
           for {
-            categoryOptions <- CategoryService.getCategoryOptions()
+            categoryOptions <- categoryService.getCategoryOptions()
           } yield {
             val statusOption =
               Todo.Status.values

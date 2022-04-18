@@ -5,7 +5,13 @@ import lib.model.form.{CategoryForm, CategoryFormData}
 import model.ViewValueHome
 import play.api.data.Form
 import play.api.i18n.I18nSupport
-import play.api.mvc.{AnyContent, BaseController, ControllerComponents, Request}
+import play.api.mvc.{
+  AnyContent,
+  BaseController,
+  ControllerComponents,
+  Request,
+  WrappedRequest
+}
 import service.ColorService
 
 import javax.inject.{Inject, Singleton}

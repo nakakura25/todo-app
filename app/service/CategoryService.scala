@@ -5,7 +5,12 @@ import lib.model.Category
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-object CategoryService {
+trait CategoryServiceInterface {
+  def getCategoryMap(): Future[Map[Category.Id, Category]]
+  def getCategoryOptions(): Future[Seq[(String, String)]]
+}
+
+class CategoryService extends CategoryServiceInterface {
   import lib.persistence.default._
 
   def getCategoryMap(): Future[Map[Category.Id, Category]] =
