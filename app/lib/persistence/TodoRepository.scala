@@ -1,7 +1,7 @@
 package lib.persistence
 
 import ixias.persistence.SlickRepository
-import lib.model.Todo
+import lib.model.{Category, Todo}
 import slick.jdbc.JdbcProfile
 
 import scala.concurrent.Future
@@ -12,8 +12,20 @@ case class TodoRepository[P <: JdbcProfile]()(implicit val driver: P)
 
   import api._
 
+  val DELETED_CATEGORY_ID = Some(Category.Id(0L))
+
   def list(): Future[Seq[EntityEmbeddedId]] =
     RunDBAction(TodoTable, "slave") { _.result }
+
+  def findByCategoryId(id: Category.Id): Future[Seq[EntityEmbeddedId]] =
+    RunDBAction(TodoTable, "slave") { _.filter(_.categoryId === id).result }
+
+  def updateTodos(
+      todos: Seq[EntityEmbeddedId]
+  ): Future[Seq[Option[EntityEmbeddedId]]] =
+    Future.sequence(todos.map(todo => {
+      update(todo.v.copy(categoryId = DELETED_CATEGORY_ID).toEmbeddedId)
+    }))
 
   override def get(id: Id): Future[Option[EntityEmbeddedId]] =
     RunDBAction(TodoTable, "slave") { _.filter(_.id === id).result.headOption }

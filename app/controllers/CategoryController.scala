@@ -5,13 +5,7 @@ import lib.model.form.{CategoryForm, CategoryFormData}
 import model.ViewValueHome
 import play.api.data.Form
 import play.api.i18n.I18nSupport
-import play.api.mvc.{
-  AnyContent,
-  BaseController,
-  ControllerComponents,
-  Request,
-  WrappedRequest
-}
+import play.api.mvc.{AnyContent, BaseController, ControllerComponents, Request}
 import service.ColorService
 
 import javax.inject.{Inject, Singleton}
@@ -152,7 +146,9 @@ class CategoryController @Inject() (
 
   def delete(id: Long) = Action async { implicit request: Request[AnyContent] =>
     for {
-      _ <- CategoryRepository.remove(Category.Id(id))
+      _     <- CategoryRepository.remove(Category.Id(id))
+      todos <- TodoRepository.findByCategoryId(Category.Id(id))
+      _     <- TodoRepository.updateTodos(todos) if todos.size > 0
     } yield {
       Redirect(routes.CategoryController.index())
     }
