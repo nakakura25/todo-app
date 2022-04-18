@@ -47,13 +47,11 @@ class HomeController @Inject() (
   )
 
   def index() = Action async { implicit req =>
-    val start = System.currentTimeMillis
     for {
       (todos, categories) <-
         TodoRepository.list().map(todos => todos.map(_.v)) zip categoryService
           .getCategoryMap()
     } yield {
-      println("処理時間： " + (System.currentTimeMillis - start) + " ミリ秒")
       Ok(views.html.Home(vvList, todos, categories, ColorService.getColorMap()))
     }
   }
