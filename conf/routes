@@ -10,7 +10,8 @@ GET     /todo/$id<[0-9]+>/edit          controllers.HomeController.edit(id: Long
 GET     /category                       controllers.CategoryController.index
 GET     /category/store                 controllers.CategoryController.register
 GET     /category/$id<[0-9]+>/edit      controllers.CategoryController.edit(id: Long)
-GET     /api/index                      controllers.api.TodoApiController.index
+GET     /api/todo/index                 controllers.api.TodoApiController.index
+GET     /api/todo/catmap                controllers.api.TodoApiController.catmap
 
 POST    /todo/store                     controllers.HomeController.store
 POST    /todo/$id<[0-9]+>/update        controllers.HomeController.update(id: Long)
