@@ -1,5 +1,6 @@
 package controllers.api
 
+import lib.model.Todo
 import lib.model.form.{TodoForm, TodoFormData}
 import lib.model.json.TodoToJson
 import play.api.data.Form
@@ -38,6 +39,12 @@ class TodoApiController @Inject() (
     } yield {
       Ok(Json.toJson(categories))
     }
+  }
+
+  def statemap() = Action { implicit req =>
+    val stateMap =
+      Todo.Status.values.map(status => (status.code, status.name)).toMap
+    Ok(Json.toJson(stateMap))
   }
 
   def store() = Action async { implicit request: Request[AnyContent] =>
