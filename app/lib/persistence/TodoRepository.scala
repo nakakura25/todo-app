@@ -12,7 +12,7 @@ case class TodoRepository[P <: JdbcProfile]()(implicit val driver: P)
 
   import api._
 
-  val DELETED_CATEGORY_ID = Some(Category.Id(0L))
+  val DELETED_CATEGORY_ID = Category.Id(0L)
 
   def list(): Future[Seq[EntityEmbeddedId]] =
     RunDBAction(TodoTable, "slave") { _.result }
@@ -20,12 +20,14 @@ case class TodoRepository[P <: JdbcProfile]()(implicit val driver: P)
   def findByCategoryId(id: Category.Id): Future[Seq[EntityEmbeddedId]] =
     RunDBAction(TodoTable, "slave") { _.filter(_.categoryId === id).result }
 
-  def updateTodos(
-      todos: Seq[EntityEmbeddedId]
-  ): Future[Seq[Option[EntityEmbeddedId]]] =
-    Future.sequence(todos.map(todo => {
-      update(todo.v.copy(categoryId = DELETED_CATEGORY_ID).toEmbeddedId)
-    }))
+  def updateTodos(id: Category.Id): Future[Seq[EntityEmbeddedId]] =
+    RunDBAction(TodoTable) { slick =>
+      val row = slick.filter(_.categoryId === id)
+      for {
+        old <- row.result
+        _   <- row.map(_.categoryId).update(DELETED_CATEGORY_ID)
+      } yield old
+    }
 
   override def get(id: Id): Future[Option[EntityEmbeddedId]] =
     RunDBAction(TodoTable, "slave") { _.filter(_.id === id).result.headOption }
