@@ -25,7 +25,7 @@ case class TodoRepository[P <: JdbcProfile]()(implicit val driver: P)
       val row = slick.filter(_.categoryId === id)
       for {
         old <- row.result
-        _   <- row.map(_.categoryId).update(DELETED_CATEGORY_ID)
+        _   <- row.map(_.categoryId).update(DELETED_CATEGORY_ID).transactionally
       } yield old
     }
 
