@@ -46,7 +46,7 @@ case class CategoryRepository[P <: JdbcProfile]()(implicit val driver: P)
         old <- row.result.headOption
         _   <- old match {
                  case None    => DBIO.successful(0)
-                 case Some(_) => row.delete.transactionally
+                 case Some(_) => row.delete
                }
       } yield old
     }
