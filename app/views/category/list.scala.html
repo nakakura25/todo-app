@@ -1,0 +1,41 @@
+@import lib.model.Category
+@(vv: model.ViewValueCommon, categories: Seq[Category], colorMap: Map[Int, String])(implicit messagesProvider: MessagesProvider, requestHeader: RequestHeader)
+@common.Default(vv){
+    <div class="todo_header">
+        <div class="todo_header_item">
+            <a href="@controllers.routes.CategoryController.store"
+               style="text-decoration: none;">
+                <label>カテゴリー登録</label>
+            </a>
+        </div>
+    </div>
+    @for(cat <- categories) {
+    <div class="card" data-href="@controllers.routes.CategoryController.edit(cat.id.getOrElse(0))">
+        <div class="card_content">
+            <div><label>Name:</label> @cat.name</div>
+            <div><label>Slug:</label> @cat.slug</div>
+            @if(colorMap.contains(cat.color)) {
+                <div style="background-color: @colorMap(cat.color)"><label>Color:</label> @colorMap(cat.color)</div>
+            } else {
+                <div><label>Color:</label> @cat.color</div>
+            }
+        </div>
+        <div class="card_footer">
+            <div class="card_footer_item">
+                @helper.form(action = controllers.routes.CategoryController.delete(cat.id.getOrElse(0))) {
+                @helper.CSRF.formField
+                <label class="delete">削除</label>
+                }
+            </div>
+        </div>
+    </div>
+    }
+    <div class="todo_footer">
+        <div class="todo_footer_item">
+            <a href="@controllers.routes.HomeController.index"
+               style="text-decoration: none;">
+                <label>Todo一覧へ</label>
+            </a>
+        </div>
+    </div>
+}

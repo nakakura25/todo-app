@@ -1,0 +1,19 @@
+@import lib.model.form.CategoryFormData
+@(vv: model.ViewValueCommon, form: Form[CategoryFormData], colorOption: Seq[(String, String)])(implicit messagesProvider: MessagesProvider, requestHeader: RequestHeader)
+@common.Default(vv) {
+    @helper.form(action = controllers.routes.CategoryController.store) {
+    @helper.CSRF.formField
+    @helper.textarea(form("name"),
+        'rows -> 1, 'cols -> 40,
+        '_label -> "name", '_showConstrainsts -> false)
+    @helper.textarea(form("slug"),
+        'rows -> 1, 'cols -> 40,
+        '_label -> "slug", '_showConstrainsts -> false)
+    @helper.select(
+        field = form("color"),
+        options = colorOption,
+    )
+    <input type="submit" value="登録" />
+    }
+}
+

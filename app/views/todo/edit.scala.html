@@ -1,0 +1,24 @@
+@import lib.model.form.TodoFormData
+@(vv: model.ViewValueCommon, form: Form[TodoFormData], categoryOption: Seq[(String, String)], statusOption: Seq[(String, String)], id: Long)(implicit messagesProvider: MessagesProvider, requestHeader: RequestHeader)
+@common.Default(vv) {
+    @helper.form(action = controllers.routes.HomeController.update(id)) {
+        @helper.CSRF.formField
+        @helper.textarea(form("title"),
+            'rows -> 1, 'cols -> 40,
+            '_label -> "Title", '_showConstrainsts -> false)
+        @helper.textarea(form("body"),
+            'rows -> 3, 'cols -> 40,
+            '_label -> "Body", '_showConstrainsts -> false)
+        @helper.select(
+            field = form("category"),
+            options = categoryOption,
+            '_label -> "Category",
+        )
+        @helper.select(
+            field = form("state"),
+            options = statusOption,
+            '_label -> "Status",
+        )
+        <input type="submit" value="更新" />
+    }
+}
