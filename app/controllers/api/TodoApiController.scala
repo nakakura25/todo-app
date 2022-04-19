@@ -1,13 +1,13 @@
 package controllers.api
 
-import lib.model.Todo
+import lib.model.{Category, Todo}
 import lib.model.form.{TodoForm, TodoFormData}
 import lib.model.json.TodoToJson
 import play.api.data.Form
 import play.api.i18n.I18nSupport
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
-import service.CategoryService
+import service.{CategoryService, ColorService}
 
 import javax.inject._
 import scala.concurrent.ExecutionContext
@@ -26,25 +26,24 @@ class TodoApiController @Inject() (
 
   def index() = Action async { implicit req =>
     for {
-      todos <- TodoRepository.list().map(todos => todos.map(_.v))
+      todos      <- TodoRepository.list().map(todos => todos.map(_.v))
+      categories <- categoryService.getCategoryMap()
     } yield {
-      val jsonTodos: Seq[TodoToJson] = todos.map(todo => TodoToJson(todo))
-      Ok(Json.toJson(jsonTodos))
+      val jsonTodos = Json.toJson(
+        todos.map(todo =>
+          TodoToJson(
+            todo,
+            categories(todo.categoryId.getOrElse(Category.Id(0L)))
+          )
+        )
+      )
+      val jsonColor = Json.toJson(ColorService.getColorMap())
+      val map       = Map(
+        "todos" -> jsonTodos,
+        "color" -> jsonColor
+      )
+      Ok(Json.toJson(map)).as(JSON)
     }
-  }
-
-  def catmap() = Action async { implicit req =>
-    for {
-      categories <- categoryService.getCategoryMapToJson()
-    } yield {
-      Ok(Json.toJson(categories))
-    }
-  }
-
-  def statemap() = Action { implicit req =>
-    val stateMap =
-      Todo.Status.values.map(status => (status.code, status.name)).toMap
-    Ok(Json.toJson(stateMap))
   }
 
   def store() = Action async { implicit request: Request[AnyContent] =>

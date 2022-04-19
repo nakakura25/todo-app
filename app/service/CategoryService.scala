@@ -26,19 +26,4 @@ class CategoryService extends CategoryServiceInterface {
     } yield category
       .map(_.v)
       .map(v => (v.id.get.toString, v.name))
-
-  def getCategoryMapToJson(): Future[Map[Long, String]] =
-    for {
-      category <- CategoryRepository.list()
-    } yield category
-      .map(_.v)
-      .foldLeft(Map[Long, String]())((k, v) =>
-        k.updated(
-          v.id match {
-            case Some(res) => res.toLong
-          },
-          v.name
-        )
-      )
-
 }
