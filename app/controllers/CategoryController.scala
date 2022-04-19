@@ -146,8 +146,7 @@ class CategoryController @Inject() (
 
   def delete(id: Long) = Action async { implicit request: Request[AnyContent] =>
     for {
-      _ <- CategoryRepository.remove(Category.Id(id)) zip
-             TodoRepository.updateTodos(Category.Id(id))
+      _ <- CategoryRepository.removeCategory(Category.Id(id))
     } yield {
       Redirect(routes.CategoryController.index())
     }

@@ -50,4 +50,39 @@ case class CategoryRepository[P <: JdbcProfile]()(implicit val driver: P)
                }
       } yield old
     }
+
+  private final val DELETED_CATEGORY_ID = Category.Id(0L)
+
+  def removeCategory(id: Id) = {
+    RunDBAction(CategoryTable) { slick =>
+      (for {
+        _ <- slick.filter(_.id === id).delete
+        _ <- TodoTable.query
+               .filter(_.categoryId === id)
+               .map(_.categoryId)
+               .update(DELETED_CATEGORY_ID)
+      } yield ()).transactionally
+    }
+  }
+
+  // sample
+  def removeCategoryOther(id: Id): Future[Unit] = {
+    DBAction(CategoryTable) { case (db, catSlick) =>
+      DBAction(TodoTable) { case (_, todoSlick) =>
+        val action = for {
+          _ <- DBIO
+                 .seq(
+                   catSlick.filter(_.id === id).delete,
+                   todoSlick
+                     .filter(_.categoryId === id)
+                     .map(_.categoryId)
+                     .update(DELETED_CATEGORY_ID)
+                 )
+                 .transactionally
+        } yield ()
+        db.run(action)
+      }
+    }
+  }
+
 }
