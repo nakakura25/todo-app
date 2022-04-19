@@ -12,7 +12,7 @@ case class TodoRepository[P <: JdbcProfile]()(implicit val driver: P)
 
   import api._
 
-  val DELETED_CATEGORY_ID = Category.Id(0L)
+  private final val DELETED_CATEGORY_ID = Category.Id(0L)
 
   def list(): Future[Seq[EntityEmbeddedId]] =
     RunDBAction(TodoTable, "slave") { _.result }
