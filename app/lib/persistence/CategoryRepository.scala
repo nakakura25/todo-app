@@ -50,4 +50,17 @@ case class CategoryRepository[P <: JdbcProfile]()(implicit val driver: P)
                }
       } yield old
     }
+
+  val DELETED_CATEGORY_ID = Category.Id(0L)
+  def remove_(id: Id) = {
+    RunDBAction(CategoryTable) { slick =>
+      (for {
+        _ <- slick.filter(_.id === id).delete
+        _ <- TodoTable.query
+               .filter(_.categoryId === id)
+               .map(_.categoryId)
+               .update(DELETED_CATEGORY_ID)
+      } yield ()).transactionally
+    }
+  }
 }
