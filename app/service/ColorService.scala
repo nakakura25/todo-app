@@ -1,6 +1,7 @@
 package service
 
 import com.typesafe.config.ConfigFactory
+import lib.model.json.ColorToJson
 
 import scala.collection.JavaConverters.iterableAsScalaIterableConverter
 
@@ -17,4 +18,5 @@ object ColorService {
 
   def getColorOption(): Seq[(String, String)] =
     getColorMap().map(k => (k._1.toString, k._2)).toSeq
+
 }
