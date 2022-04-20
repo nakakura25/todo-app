@@ -38,6 +38,6 @@ case class TodoFromJson(
     state:      Short
 )
 
-object JsValueCreateTodo {
+object TodoFromJson {
   implicit val reads: Reads[TodoFromJson] = Json.reads[TodoFromJson]
 }

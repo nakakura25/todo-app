@@ -18,7 +18,16 @@ class CategoryService extends CategoryServiceInterface {
       category <- CategoryRepository.list()
     } yield category
       .map(_.v)
-      .foldLeft(Map[Category.Id, Category]())((k, v) => k.updated(v.id.get, v))
+      .foldLeft(
+        Map[Category.Id, Category](
+          Category.Id(0L) -> Category(
+            id    = Some(Category.Id(0L)),
+            name  = "None",
+            slug  = "None",
+            color = 0
+          )
+        )
+      )((k, v) => k.updated(v.id.get, v))
 
   def getCategoryOptions(): Future[Seq[(String, String)]] =
     for {
