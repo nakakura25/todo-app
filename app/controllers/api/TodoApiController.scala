@@ -1,16 +1,7 @@
 package controllers.api
 
-import lib.model.form.{TodoForm, TodoFormData}
-import lib.model.json.{
-  CategoryToJson,
-  Color,
-  ColorToJson,
-  StatusToJson,
-  TodoFromJson,
-  TodoToJson
-}
+import lib.model.json._
 import lib.model.{Category, Todo}
-import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
@@ -29,12 +20,11 @@ class TodoApiController @Inject() (
 
   import lib.persistence.default._
 
-  val form: Form[TodoFormData] = TodoForm.form
-
   def index() = Action async { implicit req =>
     for {
-      todos      <- TodoRepository.list().map(todos => todos.map(_.v))
-      categories <- categoryService.getCategoryMap()
+      (todos, categories) <-
+        TodoRepository.list().map(todos => todos.map(_.v)) zip
+          categoryService.getCategoryMap()
     } yield {
       val jsonTodos    = Json.toJson(
         todos.map(todo =>
@@ -64,7 +54,7 @@ class TodoApiController @Inject() (
         "category" -> jsonCategory,
         "status"   -> jsonStatus
       )
-      Ok(Json.toJson(map)).as(JSON)
+      Ok(Json.toJson(map))
     }
   }
 
