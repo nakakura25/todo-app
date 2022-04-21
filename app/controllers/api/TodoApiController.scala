@@ -22,8 +22,9 @@ class TodoApiController @Inject() (
 
   def index() = Action async { implicit req =>
     for {
-      todos      <- TodoRepository.list().map(todos => todos.map(_.v))
-      categories <- categoryService.getCategoryMap()
+      (todos, categories) <-
+        TodoRepository.list().map(todos => todos.map(_.v)) zip
+          categoryService.getCategoryMap()
     } yield {
       val jsonTodos    = Json.toJson(
         todos.map(todo =>
