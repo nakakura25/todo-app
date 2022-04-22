@@ -20,26 +20,14 @@ class CategoryApiController @Inject() (
 
   import lib.persistence.default._
 
-  def index() = Action async { implicit req =>
+  def get() = Action async { implicit req =>
     for {
       categories <- CategoryRepository.list().map(cats => cats.map(_.v))
     } yield {
       val jsonCategories = Json.toJson(
         categories.map(category => CategoryToJson(category))
       )
-      val jsonColor      = Json.toJson(
-        ColorService
-          .getColorMap()
-          .map(c => {
-            val color = Color(c._1, c._2)
-            ColorToJson(color)
-          })
-      )
-      val map            = Map(
-        "category" -> jsonCategories,
-        "color"    -> jsonColor
-      )
-      Ok(Json.toJson(map))
+      Ok(jsonCategories)
     }
   }
 

@@ -20,7 +20,7 @@ class TodoApiController @Inject() (
 
   import lib.persistence.default._
 
-  def index() = Action async { implicit req =>
+  def get() = Action async { implicit req =>
     for {
       (todos, categories) <-
         TodoRepository.list().map(todos => todos.map(_.v)) zip

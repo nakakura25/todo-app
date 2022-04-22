@@ -18,15 +18,18 @@ POST    /category/store                 controllers.CategoryController.store
 POST    /category/$id<[0-9]+>/update    controllers.CategoryController.update(id: Long)
 POST    /category/$id<[0-9]+>/delete    controllers.CategoryController.delete(id: Long)
 
-GET     /api/todo                       controllers.api.TodoApiController.index
+GET     /api/todo                       controllers.api.TodoApiController.get
 POST    /api/todo                       controllers.api.TodoApiController.store
 PUT     /api/todo                       controllers.api.TodoApiController.update
 DELETE  /api/todo/:id                   controllers.api.TodoApiController.delete(id: Long)
 
-GET     /api/category                   controllers.api.CategoryApiController.index
+GET     /api/category                   controllers.api.CategoryApiController.get
 POST    /api/category                   controllers.api.CategoryApiController.store
 PUT     /api/category                   controllers.api.CategoryApiController.update
 DELETE  /api/category/:id               controllers.api.CategoryApiController.delete(id: Long)
+
+GET     /api/status                     controllers.api.TodoApiController.get
+GET     /api/color                      controllers.api.ColorApiController.get
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
