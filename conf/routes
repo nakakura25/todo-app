@@ -28,7 +28,7 @@ POST    /api/category                   controllers.api.CategoryApiController.st
 PUT     /api/category                   controllers.api.CategoryApiController.update
 DELETE  /api/category/:id               controllers.api.CategoryApiController.delete(id: Long)
 
-GET     /api/status                     controllers.api.TodoApiController.get
+GET     /api/status                     controllers.api.StatusApiController.get
 GET     /api/color                      controllers.api.ColorApiController.get
 
 # Map static resources from the /public folder to the /assets URL path
